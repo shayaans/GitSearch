@@ -1,0 +1,60 @@
+<html ng-app="gitSearch">
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+    <script src="gitController.js"></script>
+  </head>
+  <body ng-controller="gitSearchController">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-tower"></span>GitSearch</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">      
+        <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search Git By Username" ng-model="user" ng-change="searchForUser();" autofocus>
+          </div>
+        </form>
+        
+      </div><!-- /.navbar-collapse -->
+
+    </div><!-- /.container-fluid -->
+  </nav>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        Users
+        <div ng-repeat="returnedUser in returnedUsers">
+          <a href="#" ng-click="getRepoData(returnedUser);">{{returnedUser.login}}</a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        Repositories for {{selectedUser.login}}
+        <div ng-repeat="returnedRepo in returnedRepos">
+          <a href="#" ng-click="getCommits(returnedRepo);">{{returnedRepo.full_name}}</a>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        Commits for {{selectedRepo.full_name}}
+        <div ng-repeat="returnedCommit in returnedCommits">
+          {{returnedCommit.commit.author.name}}<br>
+          {{returnedCommit.commit.message}}
+          <hr>
+        </div>
+      </div>
+      
+      </div>
+    </div>
+  </div>
+</html>
