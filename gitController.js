@@ -8,28 +8,47 @@
 **/
 
 angular.module('gitSearch', []) 
-	.controller('gitSearchController', function($scope, $http) {
+	.controller('gitSearchController', function($scope, $http, $timeout) {
 
-		$scope.searchForUser = function() {
-			$scope.selectedUser = null;
-			$scope.selectedRepo = null;
-			$scope.returnedRepos = [];
-			$scope.returnedCommits = [];
-			var url = "https://api.github.com/search/users?q=" + $scope.user;
-			if($scope.user.length === 0){
-				$scope.returnedUsers = null;
-				return;
-			}
-			$http.get(url).
-				success(function(data,status) {
-					if(status===200) {
-						$scope.returnedUsers = data.items;
-					}
-				}).
-				error(function(data,status){
-					alert("something happened with quhhnnhhhh");
-				});
-		};
+		//keep a variable for storing timeoutPromise
+    var timeoutPromise;
+
+    $scope.searchForUser = function () {
+        $scope.selectedUser = null;
+        $scope.selectedRepo = null;
+        $scope.returnedRepos = [];
+        $scope.returnedCommits = [];
+
+        if ($scope.user.length === 0) {
+            $scope.returnedUsers = null;
+            return;
+        }
+
+        //if already a timeout is in progress cancel it
+        if (timeoutPromise) {
+            $timeout.cancel(timeoutPromise);
+        }
+
+        //Make a fresh timeout
+        timeoutPromise = $timeout(searchUsers, 1000)
+                         .finally(function(){
+                             timeoutPromise = null; //nullify it
+                          });
+
+    };
+
+    function searchUsers() {
+        $http.get("https://api.github.com/search/users?q=" + $scope.user).
+        success(function (data, status) {
+            if (status === 200) {
+                $scope.returnedUsers = data.items;
+            }
+        }).
+        error(function (data, status) {
+            alert("something happened with quhhnnhhhh");
+        });
+
+    }
 
 		$scope.getRepoData = function(singleUser) {
 			$scope.selectedUser = singleUser;
@@ -56,5 +75,5 @@ angular.module('gitSearch', [])
 				.error(function() {
 					alert("something happened in single repo");
 				});
-		}		
+		}
 	});

@@ -21,9 +21,9 @@
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">      
-        <form class="navbar-form navbar-left" role="search">
+        <form class="navbar-form navbar-left" role="search" name="userName">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search Git By Username" ng-model="user" ng-change="searchForUser();" autofocus>
+            <input type="text" class="form-control" placeholder="Search Git By Username" ng-model="user" ng-change="searchForUser()" autofocus>
           </div>
         </form>
         
@@ -35,18 +35,20 @@
     <div class="row">
       <div class="col-md-3">
         Users
-        <div ng-repeat="returnedUser in returnedUsers" value="set" ng-click="myVar='currentlySelected'">
-          <span class="items" ng-class="myVar">
+        <div ng-repeat="returnedUser in returnedUsers">
+          <span class="items" ng-class="{ 'active': selectedUser === returnedUser }">
             <a href="#" ng-click="getRepoData(returnedUser);">{{returnedUser.login}}</a>
           </span>
         </div>
       </div>
+
+
       <div class="col-md-3">
         Repositories for {{selectedUser.login}}
         <div ng-repeat="returnedRepo in returnedRepos">
-          
+          <span class="repoItems" ng-class="{ 'active': selectedRepo === returnedRepo, 'inactive': selectedRepo !== returnedRepo }">
             <a href="#" ng-click="getCommits(returnedRepo);">{{returnedRepo.full_name}}</a>
-          
+          </span>
         </div>
       </div>
 
